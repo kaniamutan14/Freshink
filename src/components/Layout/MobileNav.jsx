@@ -14,7 +14,7 @@ export function MobileNav({ activePanel, onBack, onOpenSettings }) {
         const feed = feeds.find(f => f.id === selectedFeed);
         return feed ? feed.title : 'Feed';
       }
-      if (selectedCategory === 'all') return 'All Articles';
+      if (selectedCategory === 'all') return 'Main Feed';
       if (selectedCategory === 'starred') return 'Starred';
       if (selectedCategory === 'search') return `Search: "${state.search.query}"`;
       if (selectedCategory) {

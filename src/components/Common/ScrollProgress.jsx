@@ -1,25 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function ScrollProgress({ targetRef }) {
-  const [progress, setProgress] = useState(0);
+  const barRef = useRef(null);
 
   useEffect(() => {
     const element = targetRef.current;
     if (!element) return;
 
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateProgress = () => {
       const scrollTop = element.scrollTop;
       const scrollHeight = element.scrollHeight;
       const clientHeight = element.clientHeight;
       
       const totalScroll = scrollHeight - clientHeight;
-      if (totalScroll <= 0) {
-        setProgress(0);
-        return;
+      let progress = 0;
+      if (totalScroll > 0) {
+        progress = scrollTop / totalScroll;
       }
       
-      const scrollPercent = (scrollTop / totalScroll) * 100;
-      setProgress(scrollPercent);
+      if (barRef.current) {
+        barRef.current.style.transform = `scaleX(${progress})`;
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
     };
 
     element.addEventListener('scroll', handleScroll, { passive: true });
@@ -34,8 +45,9 @@ export function ScrollProgress({ targetRef }) {
   return (
     <div className="scroll-progress-bar-container">
       <div 
+        ref={barRef}
         className="scroll-progress-bar-fill" 
-        style={{ transform: `scaleX(${progress / 100})`, transformOrigin: 'left' }} 
+        style={{ transform: `scaleX(0)`, transformOrigin: 'left' }} 
       />
     </div>
   );
