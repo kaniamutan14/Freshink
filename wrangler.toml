@@ -1,6 +1,10 @@
-name = "freshink-api"
-main = "index.js"
-compatibility_date = "2024-01-01"
+name = "freshink"
+main = "worker/index.js"
+compatibility_date = "2026-05-21"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
 
 [vars]
 # Optional default server endpoints (configure on cloudflare dashboard or override in headers)

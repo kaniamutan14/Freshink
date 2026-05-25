@@ -38,7 +38,8 @@ export default {
         return handleFullTextScraper(request);
       }
 
-      return new Response('FreshInk Worker API Gateway', { status: 200, headers: CORS_HEADERS });
+      // 4. Serve React App (Static Assets fallback)
+      return env.ASSETS.fetch(request);
     } catch (error) {
       return new Response(JSON.stringify({ error: 'worker_error', message: error.message }), {
         status: 500,
