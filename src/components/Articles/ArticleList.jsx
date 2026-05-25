@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import { AppContext } from '../../store/AppContext';
 import { useArticles } from '../../hooks/useArticles';
 import { useFeeds } from '../../hooks/useFeeds';
@@ -66,7 +66,9 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
 
 
   const fetchArticlesRef = useRef(fetchArticles);
-  fetchArticlesRef.current = fetchArticles;
+  useEffect(() => {
+    fetchArticlesRef.current = fetchArticles;
+  }, [fetchArticles]);
 
   // Fetch new list when filter or active feed/category changes
   useEffect(() => {
@@ -84,6 +86,20 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
         <div className="header-meta-row">
           <h2 className="list-title">{getHeaderTitle()}</h2>
           <div className="list-header-controls">
+            {(state.ui.layoutMode === 'two-panel' || state.ui.layoutMode === 'one-panel') && (
+              <button
+                onClick={() => dispatch({ type: 'UPDATE_UI', payload: { sidebarDrawerOpen: true } })}
+                className="list-settings-btn"
+                aria-label="Open Feeds Menu"
+                title="Feeds Menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather-icon">
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              </button>
+            )}
             <LayoutToggle />
             {onOpenSettings && (
               <button 

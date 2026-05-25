@@ -8,28 +8,6 @@ export function useAuth() {
   const { state, dispatch } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Listen for auth expiration events from API client
-    const handleAuthExpired = async () => {
-      // Attempt silent re-authentication via single-user mode first
-      const refreshed = await checkSingleUserMode();
-      if (!refreshed) {
-        logout();
-      }
-    };
-    window.addEventListener('freshink-auth-expired', handleAuthExpired);
-    
-    // Check single-user auto-login if not logged in
-    if (!state.auth.isLoggedIn) {
-      setLoading(true);
-      checkSingleUserMode().finally(() => setLoading(false));
-    }
-
-    return () => {
-      window.removeEventListener('freshink-auth-expired', handleAuthExpired);
-    };
-  }, [state.auth.isLoggedIn]);
-
   const checkSingleUserMode = async () => {
     try {
       const res = await fetch('/api/auth/single-user');
@@ -68,6 +46,48 @@ export function useAuth() {
       return false;
     }
   };
+
+  const logout = async () => {
+    localStorage.removeItem('freshink_auth_token');
+    localStorage.removeItem('freshink_write_token');
+    localStorage.removeItem('freshink_user');
+    localStorage.removeItem('freshink_freshrss_url');
+    localStorage.removeItem('freshink_demo_mode');
+    
+    // Clear local IndexedDB
+    const dbInstance = await db.openDB();
+    const tx = dbInstance.transaction(['feedData', 'syncQueue', 'authData'], 'readwrite');
+    tx.objectStore('feedData').clear();
+    tx.objectStore('syncQueue').clear();
+    tx.objectStore('authData').clear();
+
+    dispatch({ type: 'LOGOUT' });
+  };
+
+  useEffect(() => {
+    // Listen for auth expiration events from API client
+    const handleAuthExpired = async () => {
+      // Attempt silent re-authentication via single-user mode first
+      const refreshed = await checkSingleUserMode();
+      if (!refreshed) {
+        logout();
+      }
+    };
+    window.addEventListener('freshink-auth-expired', handleAuthExpired);
+    
+    // Check single-user auto-login if not logged in
+    if (!state.auth.isLoggedIn) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLoading(true);
+      checkSingleUserMode().finally(() => setLoading(false));
+    }
+
+    return () => {
+      window.removeEventListener('freshink-auth-expired', handleAuthExpired);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.auth.isLoggedIn]);
+
 
   const login = async (freshrssUrl, username, password) => {
     setLoading(true);
@@ -115,22 +135,6 @@ export function useAuth() {
     }
   };
 
-  const logout = async () => {
-    localStorage.removeItem('freshink_auth_token');
-    localStorage.removeItem('freshink_write_token');
-    localStorage.removeItem('freshink_user');
-    localStorage.removeItem('freshink_freshrss_url');
-    localStorage.removeItem('freshink_demo_mode');
-    
-    // Clear local IndexedDB
-    const dbInstance = await db.openDB();
-    const tx = dbInstance.transaction(['feedData', 'syncQueue', 'authData'], 'readwrite');
-    tx.objectStore('feedData').clear();
-    tx.objectStore('syncQueue').clear();
-    tx.objectStore('authData').clear();
-
-    dispatch({ type: 'LOGOUT' });
-  };
 
   const tryDemoMode = async () => {
     setLoading(true);

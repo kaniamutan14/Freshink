@@ -1,4 +1,5 @@
-import React, { createContext, useReducer, useEffect, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useReducer, useEffect, useState } from 'react';
 import * as db from '../utils/db';
 
 export const AppContext = createContext();
@@ -27,7 +28,8 @@ const initialState = {
   },
   ui: {
     activePanel: 'sidebar', // sidebar | list | reader
-    layoutMode: localStorage.getItem('freshink_layout_mode') || 'three-panel', // three-panel | two-panel
+    layoutMode: localStorage.getItem('freshink_layout_mode') || 'three-panel', // three-panel | two-panel | one-panel
+    sidebarDrawerOpen: false,
     selectedCategory: null,
     selectedFeed: null,
     selectedArticle: null,
@@ -277,7 +279,7 @@ export function AppProvider({ children }) {
         setHasLoadedFromDB(true);
       });
     } else {
-      setHasLoadedFromDB(true);
+      setTimeout(() => setHasLoadedFromDB(true), 0);
     }
   }, [state.auth.isLoggedIn]);
 

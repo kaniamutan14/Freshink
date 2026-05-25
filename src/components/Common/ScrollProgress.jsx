@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export function ScrollProgress({ targetRef }) {
   const [progress, setProgress] = useState(0);

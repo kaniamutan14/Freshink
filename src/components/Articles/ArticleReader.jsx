@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '../../store/AppContext';
 import { useArticles } from '../../hooks/useArticles';
 import { ScrollProgress } from '../Common/ScrollProgress';
 import { FontSizeControl } from '../Common/FontSizeControl';
 import { GutenbergToggle } from '../Common/GutenbergToggle';
+import { LayoutToggle } from '../Common/LayoutToggle';
 import { formatFullDate, calculateReadingTime } from '../../utils/dateFormat';
 import { sanitizeHTML } from '../../utils/sanitize';
 
@@ -44,8 +45,10 @@ export function ArticleReader() {
     if (readerScrollRef.current) {
       readerScrollRef.current.scrollTop = 0;
     }
-    setScrapingError(null);
-    setImgError(false);
+    setTimeout(() => {
+      setScrapingError(null);
+      setImgError(false);
+    }, 0);
   }, [article]);
 
   const handleFetchFullText = async () => {
@@ -91,6 +94,21 @@ export function ArticleReader() {
       {/* Reader Toolbar Header */}
       <header className="reader-toolbar">
         <div className="toolbar-left-group">
+          {state.ui.layoutMode === 'one-panel' && (
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'UPDATE_UI', payload: { sidebarDrawerOpen: true } })}
+              className="toolbar-btn"
+              aria-label="Open Feeds Menu"
+              title="Feeds Menu"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather-icon" style={{width: 18, height: 18}}>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          )}
           {/* Read/Unread toggler */}
           <button 
             type="button"
@@ -116,6 +134,7 @@ export function ArticleReader() {
 
         {/* Adjustments group */}
         <div className="toolbar-right-group">
+          {state.ui.layoutMode === 'one-panel' && <LayoutToggle />}
           <FontSizeControl />
           <GutenbergToggle />
           <a 

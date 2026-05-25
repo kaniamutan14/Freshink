@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 export function PullToRefresh({ children, onRefresh, isLoading }) {
   const [pullOffset, setPullOffset] = useState(0);
@@ -12,7 +12,9 @@ export function PullToRefresh({ children, onRefresh, isLoading }) {
   const PULL_THRESHOLD = 60;
 
   // Keep refs in sync with latest values
-  onRefreshRef.current = onRefresh;
+  useEffect(() => {
+    onRefreshRef.current = onRefresh;
+  }, [onRefresh]);
 
   const handleTouchStart = useCallback((e) => {
     const container = containerRef.current;

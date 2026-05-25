@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSearch } from '../../hooks/useSearch';
 
 export function SearchBar({ onSearchActive }) {

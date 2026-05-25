@@ -34,8 +34,25 @@
   grid-template-columns: 0px 420px 1fr;
 }
 
-/* Hide Sidebar when width is collapsed in 2-panel mode */
-.app-layout-grid.two-panel .sidebar-panel {
+/* One Panel (Zen Reading mode) — sidebar hidden, list hidden, reader wider */
+.app-layout-grid.one-panel {
+  grid-template-columns: 0px 0px 1fr;
+}
+
+/* Hide Sidebar when width is collapsed in 2-panel or 1-panel mode */
+.app-layout-grid.two-panel .sidebar-panel:not(.drawer-open),
+.app-layout-grid.one-panel .sidebar-panel:not(.drawer-open) {
+  width: 0px;
+  min-width: 0;
+  overflow: hidden;
+  border-right: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* Hide Article list when in 1-panel mode */
+.app-layout-grid.one-panel .article-list-panel {
   width: 0px;
   min-width: 0;
   overflow: hidden;
@@ -48,6 +65,42 @@
 /* Widen the article list in two-panel mode for better visual distinction */
 .app-layout-grid.two-panel .article-list-panel {
   width: 420px;
+}
+
+/* Desktop Sidebar Drawer */
+@media (min-width: 769px) {
+  .sidebar-panel.drawer-open {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 50; /* Above backdrop */
+    width: var(--sidebar-width);
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+    border-right: 1px solid var(--border);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-surface);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 40;
+    animation: fadeIn 0.2s ease forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Hide layout toggle button on mobile (only applies on desktop) */

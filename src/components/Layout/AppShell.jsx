@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../store/AppContext';
 import { Sidebar } from './Sidebar';
 import { ArticleList } from '../Articles/ArticleList';
@@ -104,10 +104,19 @@ export function AppShell() {
         <div 
           className={`app-layout-grid ${layoutMode} active-panel-${activePanel}`}
         >
+          {/* Desktop Overlay Backdrop for transient sidebar */}
+          {state.ui.sidebarDrawerOpen && (
+            <div 
+              className="sidebar-backdrop" 
+              onClick={() => dispatch({ type: 'UPDATE_UI', payload: { sidebarDrawerOpen: false } })}
+            />
+          )}
+
           {/* PANEL 1: Sidebar Nav (always rendering in DOM but offset on mobile via css) */}
           <Sidebar 
             onSelectStream={handleSelectStream}
             onOpenSettings={() => setShowSettings(true)}
+            isDrawerOpen={state.ui.sidebarDrawerOpen}
           />
 
           {/* PANEL 2: Article Cards List */}

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function FeedItem({ feed, unreadCount, isActive, onClick }) {
   return (
     <button 

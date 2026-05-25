@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../store/AppContext';
 import { SearchBar } from '../Search/SearchBar';
 import { CategoryTree } from '../Categories/CategoryTree';
 
-export function Sidebar({ onSelectStream, onOpenSettings }) {
+export function Sidebar({ onSelectStream, onOpenSettings, isDrawerOpen }) {
   const { state, dispatch } = useContext(AppContext);
   const { categories, feeds, unreadCounts } = state;
   const { selectedCategory, selectedFeed, filter } = state.ui;
@@ -11,6 +11,13 @@ export function Sidebar({ onSelectStream, onOpenSettings }) {
   const toggleFilter = () => {
     const nextFilter = filter === 'unread' ? 'all' : 'unread';
     dispatch({ type: 'UPDATE_UI', payload: { filter: nextFilter } });
+  };
+
+  const handleSelectStream = (type, id) => {
+    onSelectStream(type, id);
+    if (isDrawerOpen) {
+      dispatch({ type: 'UPDATE_UI', payload: { sidebarDrawerOpen: false } });
+    }
   };
 
   const getAllArticlesUnreadCount = () => {
@@ -24,7 +31,7 @@ export function Sidebar({ onSelectStream, onOpenSettings }) {
   };
 
   return (
-    <aside className="sidebar-panel">
+    <aside className={`sidebar-panel ${isDrawerOpen ? 'drawer-open' : ''}`}>
       {/* Editorial Title Logo */}
       <div className="sidebar-branding">
         <h1 className="sidebar-logo">FreshInk</h1>
@@ -34,7 +41,7 @@ export function Sidebar({ onSelectStream, onOpenSettings }) {
       <div className="sidebar-search-container">
         <SearchBar onSearchActive={(active) => {
           if (active) {
-            onSelectStream('search', 'search');
+            handleSelectStream('search', 'search');
           }
         }} />
       </div>
@@ -54,7 +61,7 @@ export function Sidebar({ onSelectStream, onOpenSettings }) {
           {/* All Articles */}
           <button 
             className={`special-nav-btn ${selectedCategory === 'all' && !selectedFeed ? 'active' : ''}`}
-            onClick={() => onSelectStream('all', 'all')}
+            onClick={() => handleSelectStream('all', 'all')}
           >
             <span className="nav-icon">📰</span>
             <span className="nav-label">All Articles</span>
@@ -68,7 +75,7 @@ export function Sidebar({ onSelectStream, onOpenSettings }) {
           {/* Starred Articles */}
           <button 
             className={`special-nav-btn ${selectedCategory === 'starred' && !selectedFeed ? 'active' : ''}`}
-            onClick={() => onSelectStream('starred', 'starred')}
+            onClick={() => handleSelectStream('starred', 'starred')}
           >
             <span className="nav-icon text-terracotta">★</span>
             <span className="nav-label">Starred Items</span>
@@ -89,7 +96,7 @@ export function Sidebar({ onSelectStream, onOpenSettings }) {
             categories={categories}
             feeds={feeds}
             unreadCounts={unreadCounts}
-            onSelectStream={onSelectStream}
+            onSelectStream={handleSelectStream}
           />
         </div>
       </nav>

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useSwipe } from '../../hooks/useSwipe';
 
 export function SwipeHandler({ children, onSwipe, className = '' }) {
