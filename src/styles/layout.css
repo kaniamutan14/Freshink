@@ -1,0 +1,213 @@
+/* 
+  Core Layout Architecture (Grid Systems & Responsive Panels)
+*/
+
+.app-shell-viewport-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.mobile-header-bar {
+  display: none; /* Desktop hidden */
+}
+
+.app-layout-grid {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Three Panel (Default Power User mode) */
+.app-layout-grid.three-panel {
+  grid-template-columns: var(--sidebar-width) var(--list-width) 1fr;
+}
+
+/* Two Panel (Spacious Editorial mode) — sidebar hidden, list wider */
+.app-layout-grid.two-panel {
+  grid-template-columns: 0px 420px 1fr;
+}
+
+/* Hide Sidebar when width is collapsed in 2-panel mode */
+.app-layout-grid.two-panel .sidebar-panel {
+  width: 0px;
+  min-width: 0;
+  overflow: hidden;
+  border-right: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* Widen the article list in two-panel mode for better visual distinction */
+.app-layout-grid.two-panel .article-list-panel {
+  width: 420px;
+}
+
+/* Hide layout toggle button on mobile (only applies on desktop) */
+@media (max-width: 768px) {
+  .layout-toggle-btn {
+    display: none !important;
+  }
+}
+
+/* Responsive breakdowns */
+@media (max-width: 1024px) {
+  /* Tablet layouts: auto force 2-panel */
+  .app-layout-grid {
+    grid-template-columns: 0px 340px 1fr !important;
+  }
+  .sidebar-panel {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile layout resets: Single-panel active state machine */
+  .mobile-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--mobile-header-height);
+    padding: 0 12px;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+    gap: 8px;
+  }
+
+  .mobile-nav-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    color: var(--accent-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+  }
+
+  .mobile-nav-back-btn:hover {
+    background-color: var(--bg-primary);
+  }
+
+  .nav-arrow-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .back-text {
+    font-size: 0.8rem;
+  }
+
+  .mobile-header-title {
+    flex: 1;
+    font-family: var(--font-serif-headline);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    min-width: 0;
+  }
+
+  .mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .mobile-filter-toggle {
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
+    transition: all 0.15s ease;
+  }
+
+  .mobile-filter-toggle.active {
+    background-color: var(--accent-primary);
+    color: var(--bg-primary);
+    border-color: var(--accent-primary);
+  }
+
+  .mobile-settings-trigger {
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.15s ease;
+  }
+
+  .mobile-settings-trigger:hover {
+    color: var(--accent-primary);
+  }
+
+  .settings-gear-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .app-shell-viewport-wrapper {
+    height: 100vh;
+  }
+
+  .app-layout-grid {
+    display: flex !important;
+    width: 300vw !important; /* Side by side panels */
+    height: calc(100vh - var(--mobile-header-height)) !important;
+    transform: translateX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Single panel states */
+  .sidebar-panel, .article-list-panel, .article-reader-panel {
+    width: 100vw !important;
+    height: 100% !important;
+    flex-shrink: 0;
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    border-right: none !important;
+  }
+
+  /* Slide translation based on active mobile panels */
+  .app-layout-grid.active-panel-sidebar {
+    transform: translateX(0vw);
+  }
+
+  .app-layout-grid.active-panel-list {
+    transform: translateX(-100vw);
+  }
+
+  .app-layout-grid.active-panel-reader {
+    transform: translateX(-200vw);
+  }
+}
+
+/* Reusable swipe container styles */
+.swipe-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}

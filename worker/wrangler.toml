@@ -1,0 +1,9 @@
+name = "freshink-api"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+# Optional default server endpoints (configure on cloudflare dashboard or override in headers)
+FRESHRSS_URL = ""
+# FRESHRSS_USER = ""
+# FRESHRSS_PASSWORD = ""

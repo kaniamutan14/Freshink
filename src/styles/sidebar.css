@@ -1,0 +1,289 @@
+/* 
+  Sidebar Navigation Panel Styling
+*/
+
+.sidebar-panel {
+  width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 5;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.sidebar-branding {
+  padding: 24px 20px 12px 20px;
+}
+
+.sidebar-logo {
+  font-family: var(--font-serif-headline);
+  font-size: 1.6rem;
+  color: var(--accent-primary);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-search-container {
+  padding: 0 16px 16px 16px;
+}
+
+.sidebar-filter-toggle {
+  padding: 0 16px 12px 16px;
+}
+
+.sidebar-nav-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 12px;
+}
+
+/* Nav Link Buttons */
+.special-nav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.special-nav-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.special-nav-btn:hover {
+  background-color: var(--bg-primary);
+}
+
+.special-nav-btn.active {
+  background-color: var(--bg-surface);
+  color: var(--accent-primary);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  font-weight: 600;
+}
+
+.nav-icon {
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.nav-divider {
+  border: 0;
+  height: 1px;
+  background-color: var(--border);
+  margin: 16px 12px;
+}
+
+/* Collapsible Category Trees */
+.category-section {
+  margin-bottom: 4px;
+}
+
+.category-header-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px 8px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.category-header-row:hover {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.category-header-row.active {
+  background-color: var(--bg-surface);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.category-collapse-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 6px;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.category-collapse-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.category-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badge values */
+.feed-unread-badge, .category-unread-badge {
+  background-color: var(--accent-secondary); /* Olive/Sage badge */
+  color: var(--bg-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.feed-unread-badge.primary-badge {
+  background-color: var(--accent-primary);
+}
+
+.feed-unread-badge.starred-badge {
+  background-color: var(--accent-tertiary);
+}
+
+/* Category Feeds nesting list */
+.category-feeds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 20px;
+  margin-top: 2px;
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.category-feeds-list.collapsed {
+  max-height: 0px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Feed item button inside categories */
+.feed-item-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  transition: background-color 0.15s ease;
+}
+
+.feed-item-btn:hover {
+  background-color: var(--bg-primary);
+}
+
+.feed-item-btn.active {
+  background-color: var(--bg-surface);
+  color: var(--accent-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+.feed-favicon-wrapper {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.feed-favicon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.feed-favicon-fallback {
+  font-size: 0.8rem;
+}
+
+.feed-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Footer Section */
+.sidebar-footer {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-secondary);
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.profile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.profile-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-footer-btn {
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.settings-footer-btn:hover {
+  background-color: var(--bg-primary);
+  color: var(--accent-primary);
+}
+
+.feather-icon {
+  width: 18px;
+  height: 18px;
+}

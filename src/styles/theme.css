@@ -1,0 +1,131 @@
+/* 
+  PARCHMENT (Classic Cream/Book light theme)
+*/
+:root, [data-theme="parchment"] {
+  --bg-primary: #FAF6F1;
+  --bg-secondary: #F0EBE3;
+  --bg-surface: #FFFFFF;
+  --text-primary: #2C2416;
+  --text-secondary: #6B5D4F;
+  --accent-primary: #8B6F47;
+  --accent-secondary: #6B7F5E;
+  --accent-tertiary: #B85C3A;
+  --border: #D9D0C5;
+  --shadow-color: rgba(44, 36, 22, 0.08);
+}
+
+/* 
+  FOREST INK (Sage Canopy light theme)
+*/
+[data-theme="forest"] {
+  --bg-primary: #F4F6F0;
+  --bg-secondary: #E6EBE0;
+  --bg-surface: #FFFFFF;
+  --text-primary: #1C2E20;
+  --text-secondary: #586B5C;
+  --accent-primary: #4A6E53;
+  --accent-secondary: #6B7F5E;
+  --accent-tertiary: #B85C3A;
+  --border: #CCD5C5;
+  --shadow-color: rgba(28, 46, 32, 0.08);
+}
+
+/* 
+  MIDNIGHT WOOD (Warm Charcoal Dark theme)
+*/
+[data-theme="midnight"] {
+  --bg-primary: #1A1814;
+  --bg-secondary: #252219;
+  --bg-surface: #2D2A24;
+  --text-primary: #E8E0D4;
+  --text-secondary: #9B8E7E;
+  --accent-primary: #C4A26E;
+  --accent-secondary: #8FA97C;
+  --accent-tertiary: #D4845E;
+  --border: #3D3830;
+  --shadow-color: rgba(0, 0, 0, 0.25);
+}
+
+/* 
+  NORDIC GRAY (Slate Blue Dark theme)
+*/
+[data-theme="nordic"] {
+  --bg-primary: #1E222A;
+  --bg-secondary: #282C34;
+  --bg-surface: #21252B;
+  --text-primary: #ABB2BF;
+  --text-secondary: #5C6370;
+  --accent-primary: #61AFEF;
+  --accent-secondary: #98C379;
+  --accent-tertiary: #E06C75;
+  --border: #3E4452;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* System dark preference mapping if 'auto' is selected */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --bg-primary: #1A1814;
+    --bg-secondary: #252219;
+    --bg-surface: #2D2A24;
+    --text-primary: #E8E0D4;
+    --text-secondary: #9B8E7E;
+    --accent-primary: #C4A26E;
+    --accent-secondary: #8FA97C;
+    --accent-tertiary: #D4845E;
+    --border: #3D3830;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Smooth visual transitions across theme shifts */
+html {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+body, aside, section, header, footer, button, input {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Theme selector widgets */
+.theme-toggle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.theme-options {
+  display: flex;
+  gap: 10px;
+}
+
+.theme-option-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.theme-option-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.theme-option-btn.active {
+  border: 2px solid var(--accent-tertiary);
+  transform: scale(1.05);
+}
+
+.theme-selected-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+}

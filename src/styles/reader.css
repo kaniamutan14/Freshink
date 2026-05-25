@@ -1,0 +1,511 @@
+/* 
+  Article Reader Workspace & Editorial Typography
+*/
+
+.article-reader-panel {
+  flex: 1;
+  height: 100%;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.article-reader-panel.empty {
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+}
+
+.reader-empty-state {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.editorial-seal {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 16px;
+  color: var(--border);
+}
+
+.seal-tagline {
+  font-family: var(--font-serif-headline);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+/* 
+  Top thin Terracotta progress bar
+*/
+.scroll-progress-bar-container {
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 15;
+}
+
+.scroll-progress-bar-fill {
+  height: 100%;
+  background-color: var(--accent-tertiary); /* Terracotta */
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* 
+  Toolbar Header
+*/
+.reader-toolbar {
+  height: 52px;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+  flex-shrink: 0;
+  z-index: 5;
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.toolbar-left-group, .toolbar-right-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+}
+
+.toolbar-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+.toolbar-btn.circle-btn {
+  width: 32px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.toolbar-btn.circle-btn .dot-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-tertiary); /* unread indicator dot */
+  display: block;
+}
+
+.toolbar-btn.circle-btn.read .dot-icon {
+  background-color: transparent;
+  border: 1px solid var(--border);
+}
+
+.toolbar-btn.star-btn {
+  font-size: 1.1rem;
+}
+
+.toolbar-btn.star-btn.starred {
+  color: var(--accent-tertiary);
+  border-color: var(--accent-tertiary);
+}
+
+/* Font scale controls */
+.font-size-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  height: 32px;
+  background-color: var(--bg-surface);
+}
+
+.font-size-btn {
+  padding: 0 10px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: 100%;
+}
+
+.font-size-btn:hover:not(:disabled) {
+  background-color: var(--bg-primary);
+}
+
+.font-size-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.font-size-value {
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+/* Gutenberg button override */
+.gutenberg-toggle-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.gutenberg-toggle-btn.active {
+  border-color: var(--accent-primary);
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.toolbar-link-btn {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--bg-surface);
+}
+
+.toolbar-link-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* 
+  Reading Viewport Scroll Area
+*/
+.reader-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 24px 100px 24px;
+}
+
+.editorial-layout-frame {
+  max-width: 680px; /* Perfect reading column measure */
+  margin: 0 auto;
+}
+
+/* Article Metadata Header */
+.reader-meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.source-row {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  gap: 8px;
+  color: var(--accent-primary);
+}
+
+.meta-feed-favicon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.meta-feed-fallback {
+  font-size: 0.9rem;
+}
+
+.meta-bullet {
+  color: var(--border);
+}
+
+.meta-read-time {
+  color: var(--text-secondary);
+}
+
+.reader-article-title {
+  font-family: var(--font-serif-headline);
+  font-size: 2.25rem;
+  line-height: 1.25;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.author-date-row {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  gap: 8px;
+  font-weight: 500;
+}
+
+.editorial-header-divider {
+  border: 0;
+  height: 1px;
+  background-color: var(--border);
+  margin-bottom: 32px;
+}
+
+/* 
+  Article Content Body Styling
+*/
+.reader-content-body {
+  font-family: var(--font-serif-body);
+  font-size: var(--reader-font-size);
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.reader-content-body p {
+  margin-bottom: 1.25em;
+}
+
+.reader-content-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 20px 0;
+  box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+.reader-content-body blockquote {
+  border-left: 3px solid var(--accent-tertiary);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.reader-content-body pre {
+  background-color: var(--bg-secondary);
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 20px 0;
+  font-family: monospace;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+}
+
+.reader-content-body code {
+  font-family: monospace;
+  background-color: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.reader-content-body pre code {
+  padding: 0;
+  background-color: transparent;
+  font-size: inherit;
+}
+
+.reader-content-body h1, .reader-content-body h2, .reader-content-body h3 {
+  font-family: var(--font-serif-headline);
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+.reader-content-body h2 { font-size: 1.5rem; }
+.reader-content-body h3 { font-size: 1.25rem; }
+
+.reader-content-body ul, .reader-content-body ol {
+  padding-left: 24px;
+  margin-bottom: 1.25em;
+}
+
+.reader-content-body li {
+  margin-bottom: 0.5em;
+}
+
+/* 
+  GUTENBERG CLEAN TYPOGRAPHIC OVERRIDES
+  Strips ugly tables and forces proportional serif spacing
+*/
+.gutenberg-typography .reader-content-body {
+  font-family: var(--font-serif-body) !important;
+  line-height: 1.85 !important; /* Double-ish spaced clean rhythm */
+  letter-spacing: 0.01em;
+}
+
+.gutenberg-typography .reader-content-body p {
+  margin-bottom: 1.6em !important;
+}
+
+/* Stylized initial first letter */
+.gutenberg-typography .gutenberg-first-letter {
+  float: left;
+  font-family: var(--font-serif-headline);
+  font-size: 4rem;
+  line-height: 0.8;
+  padding-top: 4px;
+  padding-right: 8px;
+  padding-left: 3px;
+  color: var(--accent-tertiary);
+  font-weight: 700;
+}
+
+.gutenberg-typography .reader-content-body blockquote {
+  font-family: var(--font-serif-body) !important;
+  font-size: 1.15rem !important;
+  line-height: 1.6 !important;
+  border-left: 4px solid var(--accent-tertiary) !important;
+  color: var(--text-primary) !important;
+  padding: 0 0 0 24px !important;
+  margin: 32px 0 !important;
+}
+
+.gutenberg-typography .reader-content-body table {
+  width: 100% !important;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 0.9rem;
+}
+
+.gutenberg-typography .reader-content-body th, 
+.gutenberg-typography .reader-content-body td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px;
+  text-align: left;
+}
+
+.gutenberg-typography .reader-content-body th {
+  font-weight: 600;
+  font-family: var(--font-sans-ui);
+  color: var(--accent-primary);
+}
+
+/* Truncated Scraper & Error Cards */
+.full-text-fetch-card, .scraping-error-card {
+  margin-top: 40px;
+  padding: 24px;
+  background-color: var(--bg-secondary);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.fetch-full-text-btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.fetch-full-text-btn:hover {
+  opacity: 0.9;
+}
+
+.scraping-error-card {
+  border-color: var(--accent-tertiary);
+  background-color: rgba(184, 92, 58, 0.05); /* very light terracotta tint */
+}
+
+.error-icon {
+  font-size: 1.8rem;
+  color: var(--accent-tertiary);
+}
+
+.fallback-original-link {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: var(--accent-tertiary);
+  color: var(--bg-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.fallback-original-link:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+
+/* Mobile Bottom Action Bar */
+.reader-mobile-action-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .reader-mobile-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 56px;
+    background-color: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    padding: 0 16px;
+    z-index: 10;
+  }
+
+  .mobile-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .mobile-action-btn:hover, .mobile-action-btn.active {
+    color: var(--accent-primary);
+    background-color: var(--bg-primary);
+    text-decoration: none;
+  }
+
+  .mobile-action-btn .action-icon {
+    font-size: 1.2rem;
+  }
+
+  .mobile-action-btn.starred .action-icon {
+    color: var(--accent-tertiary);
+  }
+}

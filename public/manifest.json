@@ -1,0 +1,27 @@
+{
+  "short_name": "FreshInk",
+  "name": "FreshInk — Premium Editorial FreshRSS",
+  "description": "Progressive Web App client for FreshRSS with elegant editorial typography and offline sync.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512x512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FAF6F1",
+  "theme_color": "#FAF6F1",
+  "display": "standalone",
+  "orientation": "portrait"
+}

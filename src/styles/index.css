@@ -1,0 +1,104 @@
+/* 
+  FreshInk Editorial Design Tokens & System Variables
+*/
+
+@import './theme.css';
+@import './layout.css';
+@import './sidebar.css';
+@import './articles.css';
+@import './reader.css';
+@import './search.css';
+@import './login.css';
+
+:root {
+  /* Common typography definitions */
+  --font-serif-headline: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-serif-body: 'Source Serif 4', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans-ui: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  
+  /* Layout Dimensions */
+  --sidebar-width: 260px;
+  --list-width: 360px;
+  --mobile-header-height: 56px;
+  
+  /* Font size scale properties (managed dynamically by JS override) */
+  --reader-font-size: 100%;
+}
+
+/* 
+  Baseline CSS resets
+*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans-ui);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 
+  Custom scrollbars mapped to active theme colors
+*/
+.scrollbar-styled::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-styled::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.scrollbar-styled::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.scrollbar-styled::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Utility Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ptr-spinning::after, .spinning-loader-tiny::after, .search-spinner-tiny::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+}
