@@ -8,7 +8,7 @@ export function openDB() {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
 
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = () => {
       const db = request.result;
       if (!db.objectStoreNames.contains('feedData')) {
         db.createObjectStore('feedData', { keyPath: 'id' });

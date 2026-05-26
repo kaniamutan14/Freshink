@@ -43,7 +43,7 @@ export function useAuth() {
         }
       }
       return false;
-    } catch (e) {
+    } catch {
       console.warn("Single user mode not active or unreachable");
       return false;
     }

@@ -14,7 +14,7 @@ export function useArticles() {
     const activeFilter = forceFilter || filter;
 
     const getFilteredLocalArticles = (localList, targetStreamId) => {
-      let filtered = localList;
+      let filtered;
       if (targetStreamId === 'user/-/state/com.google/starred') {
         filtered = localList.filter(art => art.isStarred);
       } else if (targetStreamId === 'user/-/state/com.google/reading-list' || targetStreamId === 'all') {
@@ -133,7 +133,7 @@ export function useArticles() {
     } finally {
       dispatch({ type: 'SET_ARTICLES_LOADING', payload: false });
     }
-  }, [isOnline, isDemoMode, filter, state.articles.continuation, state.feeds, dispatch]);
+  }, [isOnline, isDemoMode, filter, state.articles.continuation, state.articles.items, state.feeds, dispatch]);
 
   const toggleReadStatus = async (itemId, isRead) => {
     // 1. Optimistic Update (state + unread badges)

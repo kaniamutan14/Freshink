@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { AppContext } from '../../store/AppContext';
 import { FeedItem } from './FeedItem';
 
@@ -10,7 +10,7 @@ export function CategoryTree({ categories, feeds, unreadCounts, onSelectStream }
     try {
       const saved = localStorage.getItem('freshink_collapsed_categories');
       if (saved) return JSON.parse(saved);
-    } catch (e) {
+    } catch {
       console.warn('Could not read collapsed categories from localStorage');
     }
     return {};
@@ -22,7 +22,7 @@ export function CategoryTree({ categories, feeds, unreadCounts, onSelectStream }
       const next = { ...prev, [catId]: !prev[catId] };
       try {
         localStorage.setItem('freshink_collapsed_categories', JSON.stringify(next));
-      } catch (e) {
+      } catch {
         console.warn('Could not save collapsed categories to localStorage');
       }
       return next;

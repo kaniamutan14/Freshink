@@ -53,10 +53,10 @@ export function useFeeds() {
         }
 
         // FreshRSS exposes favicons from domain: sub.iconUrl or default favicon.ico
-        let icon = '';
+        let icon;
         try {
           icon = `https://www.google.com/s2/favicons?sz=32&domain=${new URL(sub.htmlUrl || sub.url || url).hostname}`;
-        } catch (e) {
+        } catch {
           icon = `https://www.google.com/s2/favicons?sz=32&domain=example.com`;
         }
         

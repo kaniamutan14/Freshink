@@ -34,19 +34,13 @@ export function AppShell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleSelectStream = (id, type) => {
-    let streamId = 'user/-/state/com.google/reading-list';
-    
     if (type === 'category') {
-      streamId = id; // Label/category ID
       dispatch({ type: 'UPDATE_UI', payload: { selectedCategory: id, selectedFeed: null, selectedArticle: null } });
     } else if (type === 'feed') {
-      streamId = id.startsWith('feed/') ? id : `feed/${id}`;
       dispatch({ type: 'UPDATE_UI', payload: { selectedFeed: id, selectedCategory: null, selectedArticle: null } });
     } else if (type === 'starred') {
-      streamId = 'user/-/state/com.google/starred';
       dispatch({ type: 'UPDATE_UI', payload: { selectedCategory: 'starred', selectedFeed: null, selectedArticle: null } });
     } else if (type === 'all') {
-      streamId = 'user/-/state/com.google/reading-list';
       dispatch({ type: 'UPDATE_UI', payload: { selectedCategory: 'all', selectedFeed: null, selectedArticle: null } });
     } else if (type === 'search') {
       dispatch({ type: 'UPDATE_UI', payload: { selectedCategory: 'search', selectedFeed: null, selectedArticle: null } });

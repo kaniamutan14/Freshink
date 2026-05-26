@@ -58,7 +58,7 @@ export function ArticleReader() {
 
     try {
       await fetchArticleFullText(article.id, article.url);
-    } catch (err) {
+    } catch {
       setScrapingError(
         "This site's security settings or network blocks prevented a clean text extraction."
       );

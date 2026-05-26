@@ -9,7 +9,7 @@ const CORS_HEADERS = {
 };
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     // Handle CORS Preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: CORS_HEADERS });
@@ -190,7 +190,7 @@ async function handleFullTextScraper(request) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 FreshInkScraper/1.0'
       }
     });
-  } catch (err) {
+  } catch {
     return new Response(JSON.stringify({ error: 'fetch_timeout', message: 'Site took too long to respond (10s timeout)' }), {
       status: 504,
       headers: { 'Content-Type': 'application/json', ...CORS_HEADERS }

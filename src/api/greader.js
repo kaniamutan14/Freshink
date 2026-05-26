@@ -68,10 +68,17 @@ export async function getUnreadCounts() {
 export async function getArticles(streamId, options = {}) {
   const { count = 20, continuation = null, filter = 'all' } = options;
   
-  // FreshRSS expects literal slashes for stream IDs in the path.
-  // encodeURIComponent encodes slashes to %2F, which breaks FreshRSS route matching 
-  // and causes it to fall back to 'all articles' instead of filtering by the main stream.
-  const encodedStreamId = encodeURIComponent(streamId).replace(/%2F/g, '/');
+  const encodeStreamId = (id) => {
+    // Keep standard user stream paths literal as FreshRSS matches them exactly
+    if (id.startsWith('user/')) return id;
+    
+    // For feed URLs (which contain http://), we MUST encode the URL part
+    // otherwise the server router will misinterpret the multiple slashes.
+    if (id.startsWith('feed/')) return 'feed/' + encodeURIComponent(id.substring(5));
+    
+    return encodeURIComponent(id);
+  };
+  const encodedStreamId = encodeStreamId(streamId);
   
   let endpoint = `/greader/reader/api/0/stream/contents/${encodedStreamId}?output=json&n=${count}`;
   

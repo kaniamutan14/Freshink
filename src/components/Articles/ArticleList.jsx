@@ -17,7 +17,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
   const scrollRef = useRef(null);
 
   const getStreamId = () => {
-    if (selectedFeed) return `feed/${selectedFeed}`;
+    if (selectedFeed) return selectedFeed.startsWith('feed/') ? selectedFeed : `feed/${selectedFeed}`;
     if (selectedCategory === 'starred') return 'user/-/state/com.google/starred';
     if (selectedCategory === 'all') return 'user/-/state/com.google/reading-list';
     if (selectedCategory) return selectedCategory;

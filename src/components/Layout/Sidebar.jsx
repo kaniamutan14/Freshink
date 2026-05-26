@@ -13,8 +13,8 @@ export function Sidebar({ onSelectStream, onOpenSettings, isDrawerOpen }) {
     dispatch({ type: 'UPDATE_UI', payload: { filter: nextFilter } });
   };
 
-  const handleSelectStream = (type, id) => {
-    onSelectStream(type, id);
+  const handleSelectStream = (id, type) => {
+    onSelectStream(id, type);
     if (isDrawerOpen) {
       dispatch({ type: 'UPDATE_UI', payload: { sidebarDrawerOpen: false } });
     }

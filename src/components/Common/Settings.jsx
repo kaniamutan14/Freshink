@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '../../store/AppContext';
-import { useTheme } from '../../hooks/useTheme';
+
 import { useOfflineSync } from '../../hooks/useOfflineSync';
 import { useAuth } from '../../hooks/useAuth';
 import { ThemeToggle } from './ThemeToggle';
