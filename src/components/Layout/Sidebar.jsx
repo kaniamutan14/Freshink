@@ -58,13 +58,13 @@ export function Sidebar({ onSelectStream, onOpenSettings, isDrawerOpen }) {
       {/* Nav groups */}
       <nav className="sidebar-nav-scroll scrollbar-styled">
         <div className="special-nav-items">
-          {/* All Articles */}
+          {/* Main Feed */}
           <button 
             className={`special-nav-btn ${selectedCategory === 'all' && !selectedFeed ? 'active' : ''}`}
             onClick={() => handleSelectStream('all', 'all')}
           >
             <span className="nav-icon">📰</span>
-            <span className="nav-label">All Articles</span>
+            <span className="nav-label">Main Feed</span>
             {getAllArticlesUnreadCount() > 0 && (
               <span className="feed-unread-badge primary-badge">
                 {getAllArticlesUnreadCount()}

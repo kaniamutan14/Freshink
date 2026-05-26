@@ -27,7 +27,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
   const getHeaderTitle = () => {
     if (selectedCategory === 'search') return `Search: "${searchQuery}"`;
     if (selectedCategory === 'starred') return 'Starred Items';
-    if (selectedCategory === 'all') return 'All Articles';
+    if (selectedCategory === 'all') return 'Main Feed';
     if (selectedFeed) {
       const feed = state.feeds.find(f => f.id === selectedFeed);
       return feed ? feed.title : 'Feed';
@@ -43,7 +43,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
     // Refresh feeds then refresh active list
     await refreshFeeds();
     if (selectedCategory !== 'search') {
-      await fetchArticles(getStreamId());
+      await fetchArticlesRef.current(getStreamId());
     }
   };
 
@@ -128,6 +128,14 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
             onClick={() => dispatch({ type: 'UPDATE_UI', payload: { filter: filter === 'unread' ? 'all' : 'unread' } })}
           >
             {filter === 'unread' ? '● Unread' : '○ All'}
+          </button>
+          
+          <button 
+            className="list-filter-btn"
+            onClick={handleRefresh}
+            disabled={loading}
+          >
+            {loading ? 'Syncing...' : 'Sync'}
           </button>
 
           {selectedCategory !== 'search' && selectedCategory !== 'starred' && activeArticles.length > 0 && (
