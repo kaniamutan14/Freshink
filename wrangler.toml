@@ -8,6 +8,6 @@ binding = "ASSETS"
 
 [vars]
 # Optional default server endpoints (configure on cloudflare dashboard or override in headers)
-FRESHRSS_URL = ""
+# FRESHRSS_URL = ""
 # FRESHRSS_USER = ""
 # FRESHRSS_PASSWORD = ""
