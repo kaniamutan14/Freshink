@@ -13,11 +13,12 @@ export function useAuth() {
       const res = await fetch('/api/auth/single-user');
       if (res.ok) {
         const text = await res.text();
-        const tokenMatch = text.match(/Auth=([a-zA-Z0-9_\-]+)/);
+        const tokenMatch = text.match(/Auth=([^\s]+)/);
         if (tokenMatch && tokenMatch[1]) {
            const token = tokenMatch[1];
+           const username = res.headers.get('X-FreshRSS-Username') || 'Admin';
            localStorage.setItem('freshink_auth_token', token);
-           localStorage.setItem('freshink_user', 'Admin');
+           localStorage.setItem('freshink_user', username);
            localStorage.setItem('freshink_freshrss_url', window.location.origin);
            localStorage.setItem('freshink_demo_mode', 'false');
 
@@ -25,7 +26,7 @@ export function useAuth() {
              type: 'SET_AUTH',
              payload: {
                token,
-               user: 'Admin',
+               user: username,
                freshrssUrl: window.location.origin,
                isDemoMode: false
              }

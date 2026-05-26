@@ -80,9 +80,14 @@ async function handleSingleUserLogin(request, env) {
   });
 
   const responseText = await response.text();
+  const returnHeaders = new Headers(CORS_HEADERS);
+  returnHeaders.set('Content-Type', 'text/plain');
+  if (env.FRESHRSS_USER) {
+    returnHeaders.set('X-FreshRSS-Username', env.FRESHRSS_USER);
+  }
   return new Response(responseText, {
     status: response.status,
-    headers: { 'Content-Type': 'text/plain', ...CORS_HEADERS }
+    headers: returnHeaders
   });
 }
 
@@ -214,13 +219,13 @@ async function handleFullTextScraper(request) {
 }
 
 function getFreshRSSUrl(request, env) {
-  const headerUrl = request.headers.get('X-FreshRSS-URL');
-  if (headerUrl) return headerUrl;
-  
-  if (env && env.FRESHRSS_URL) {
-    return env.FRESHRSS_URL;
+  let url = request.headers.get('X-FreshRSS-URL');
+  if (!url && env && env.FRESHRSS_URL) {
+    url = env.FRESHRSS_URL;
   }
-
+  if (url) {
+    return url.replace(/\/+$/, '');
+  }
   return null;
 }
 
