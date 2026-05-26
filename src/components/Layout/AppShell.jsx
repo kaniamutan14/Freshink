@@ -55,8 +55,6 @@ export function AppShell() {
       return;
     }
 
-    fetchArticles(streamId);
-    
     // Transition on mobile
     dispatch({ type: 'UPDATE_UI', payload: { activePanel: 'list' } });
   };

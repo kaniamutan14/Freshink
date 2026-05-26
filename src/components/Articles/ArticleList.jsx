@@ -43,7 +43,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
     // Refresh feeds then refresh active list
     await refreshFeeds();
     if (selectedCategory !== 'search') {
-      await fetchArticles(getStreamId());
+      await fetchArticles(getStreamId(), false, filter);
     }
   };
 
@@ -57,7 +57,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
     if (isAtBottom && continuation && !loading && !fetchingRef.current && selectedCategory !== 'search') {
       fetchingRef.current = true;
       console.log('At bottom, loading next page...');
-      fetchArticles(getStreamId(), true).finally(() => {
+      fetchArticles(getStreamId(), true, filter).finally(() => {
         fetchingRef.current = false;
       });
     }
@@ -68,7 +68,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
   // Fetch new list when filter or active feed/category changes
   useEffect(() => {
     if (selectedCategory !== 'search') {
-      fetchArticles(getStreamId());
+      fetchArticles(getStreamId(), false, filter);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, selectedFeed, selectedCategory]);

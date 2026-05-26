@@ -9,8 +9,9 @@ export function useArticles() {
   const { isDemoMode } = state.auth;
   const { filter } = state.ui;
 
-  const fetchArticles = useCallback(async (streamId = 'user/-/state/com.google/reading-list', append = false) => {
+  const fetchArticles = useCallback(async (streamId = 'user/-/state/com.google/reading-list', append = false, forceFilter = null) => {
     dispatch({ type: 'SET_ARTICLES_LOADING', payload: true });
+    const activeFilter = forceFilter || filter;
 
     const getFilteredLocalArticles = (localList, targetStreamId) => {
       let filtered = localList;
@@ -33,7 +34,7 @@ export function useArticles() {
         filtered = localList.filter(art => feedsInCat.includes(art.feedId));
       }
 
-      if (filter === 'unread') {
+      if (activeFilter === 'unread') {
         filtered = filtered.filter(art => !art.isRead);
       }
 
@@ -67,7 +68,7 @@ export function useArticles() {
         const res = await greader.getArticles(streamId, {
           count: 40, // Fetch more in case many are filtered
           continuation: currentContinuation,
-          filter
+          filter: activeFilter
         });
 
         if (res.error) throw new Error(res.message || 'API error');
