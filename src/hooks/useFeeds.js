@@ -59,8 +59,10 @@ export function useFeeds() {
         } catch (e) {
           icon = `https://www.google.com/s2/favicons?sz=32&domain=example.com`;
         }
+        
+        const priority = sub['frss:priority'] || 'main';
 
-        return { id, title, url, categoryId, icon };
+        return { id, title, url, categoryId, icon, priority };
       }) : [];
 
       // 3. Process Unread Counts

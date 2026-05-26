@@ -1,18 +1,32 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AppContext } from '../../store/AppContext';
 import { FeedItem } from './FeedItem';
 
 export function CategoryTree({ categories, feeds, unreadCounts, onSelectStream }) {
   const { state } = useContext(AppContext);
   const { selectedCategory, selectedFeed } = state.ui;
-  const [collapsedCategories, setCollapsedCategories] = useState({});
+  
+  const [collapsedCategories, setCollapsedCategories] = useState(() => {
+    try {
+      const saved = localStorage.getItem('freshink_collapsed_categories');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.warn('Could not read collapsed categories from localStorage');
+    }
+    return {};
+  });
 
   const toggleCollapse = (catId, e) => {
     e.stopPropagation();
-    setCollapsedCategories(prev => ({
-      ...prev,
-      [catId]: !prev[catId]
-    }));
+    setCollapsedCategories(prev => {
+      const next = { ...prev, [catId]: !prev[catId] };
+      try {
+        localStorage.setItem('freshink_collapsed_categories', JSON.stringify(next));
+      } catch (e) {
+        console.warn('Could not save collapsed categories to localStorage');
+      }
+      return next;
+    });
   };
 
   const getCategoryUnreadCount = (catId) => {
@@ -25,6 +39,8 @@ export function CategoryTree({ categories, feeds, unreadCounts, onSelectStream }
     const children = feeds.filter(f => f.categoryId === catId);
     return children.reduce((sum, feed) => sum + (unreadCounts[feed.id] || 0), 0);
   };
+
+  const rootFeeds = feeds.filter(f => !f.categoryId || !categories.find(c => c.id === f.categoryId));
 
   return (
     <div className="category-tree-container">
@@ -73,6 +89,22 @@ export function CategoryTree({ categories, feeds, unreadCounts, onSelectStream }
           </div>
         );
       })}
+
+      {rootFeeds.length > 0 && (
+        <div className="category-section root-feeds-section" style={{ marginTop: '8px' }}>
+          <div className="category-feeds-list">
+            {rootFeeds.map(feed => (
+              <FeedItem
+                key={feed.id}
+                feed={feed}
+                unreadCount={unreadCounts[feed.id] || 0}
+                isActive={selectedFeed === feed.id}
+                onClick={() => onSelectStream(feed.id, 'feed')}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

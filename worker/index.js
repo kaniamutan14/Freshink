@@ -4,6 +4,7 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-FreshRSS-URL',
+  'Access-Control-Expose-Headers': 'X-FreshRSS-Username, X-FreshRSS-Target-URL',
   'Access-Control-Max-Age': '86400'
 };
 
@@ -80,9 +81,17 @@ async function handleSingleUserLogin(request, env) {
   });
 
   const responseText = await response.text();
+  const returnHeaders = new Headers(CORS_HEADERS);
+  returnHeaders.set('Content-Type', 'text/plain');
+  if (env.FRESHRSS_USER) {
+    returnHeaders.set('X-FreshRSS-Username', env.FRESHRSS_USER);
+  }
+  if (env.FRESHRSS_URL) {
+    returnHeaders.set('X-FreshRSS-Target-URL', env.FRESHRSS_URL.replace(/\/+$/, ''));
+  }
   return new Response(responseText, {
     status: response.status,
-    headers: { 'Content-Type': 'text/plain', ...CORS_HEADERS }
+    headers: returnHeaders
   });
 }
 
@@ -214,13 +223,13 @@ async function handleFullTextScraper(request) {
 }
 
 function getFreshRSSUrl(request, env) {
-  const headerUrl = request.headers.get('X-FreshRSS-URL');
-  if (headerUrl) return headerUrl;
-  
-  if (env && env.FRESHRSS_URL) {
-    return env.FRESHRSS_URL;
+  let url = request.headers.get('X-FreshRSS-URL');
+  if (!url && env && env.FRESHRSS_URL) {
+    url = env.FRESHRSS_URL;
   }
-
+  if (url) {
+    return url.replace(/\/+$/, '');
+  }
   return null;
 }
 

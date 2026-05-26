@@ -27,7 +27,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
   const getHeaderTitle = () => {
     if (selectedCategory === 'search') return `Search: "${searchQuery}"`;
     if (selectedCategory === 'starred') return 'Starred Items';
-    if (selectedCategory === 'all') return 'All Articles';
+    if (selectedCategory === 'all') return 'Main Feed';
     if (selectedFeed) {
       const feed = state.feeds.find(f => f.id === selectedFeed);
       return feed ? feed.title : 'Feed';
@@ -65,16 +65,12 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
 
 
 
-  const fetchArticlesRef = useRef(fetchArticles);
-  useEffect(() => {
-    fetchArticlesRef.current = fetchArticles;
-  }, [fetchArticles]);
-
   // Fetch new list when filter or active feed/category changes
   useEffect(() => {
     if (selectedCategory !== 'search') {
-      fetchArticlesRef.current(getStreamId());
+      fetchArticles(getStreamId());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, selectedFeed, selectedCategory]);
 
   const activeArticles = selectedCategory === 'search' ? searchResults : articles;
@@ -128,6 +124,14 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
             onClick={() => dispatch({ type: 'UPDATE_UI', payload: { filter: filter === 'unread' ? 'all' : 'unread' } })}
           >
             {filter === 'unread' ? '● Unread' : '○ All'}
+          </button>
+          
+          <button 
+            className="list-filter-btn"
+            onClick={handleRefresh}
+            disabled={loading}
+          >
+            {loading ? 'Syncing...' : 'Sync'}
           </button>
 
           {selectedCategory !== 'search' && selectedCategory !== 'starred' && activeArticles.length > 0 && (

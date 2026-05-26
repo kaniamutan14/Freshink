@@ -16,14 +16,19 @@ export function useArticles() {
       let filtered = localList;
       if (targetStreamId === 'user/-/state/com.google/starred') {
         filtered = localList.filter(art => art.isStarred);
+      } else if (targetStreamId === 'user/-/state/com.google/reading-list' || targetStreamId === 'all') {
+        filtered = localList.filter(art => {
+          const feed = state.feeds.find(f => f.id === art.feedId);
+          if (!feed) return true;
+          return ['main', 'important'].includes(feed.priority);
+        });
       } else if (targetStreamId.startsWith('feed/')) {
         filtered = localList.filter(art => art.feedId === targetStreamId || `feed/${art.feedId}` === targetStreamId);
       } else if (targetStreamId.startsWith('user/') && targetStreamId.includes('/label/')) {
         const catName = targetStreamId.split('/').pop();
         const feedsInCat = state.feeds.filter(f => f.categoryId && f.categoryId.split('/').pop() === catName).map(f => f.id);
         filtered = localList.filter(art => feedsInCat.includes(art.feedId));
-      } else if (targetStreamId !== 'user/-/state/com.google/reading-list' && targetStreamId !== 'all') {
-        // Fallback for Demo Mode (cat_1) or non-standard category IDs
+      } else {
         const feedsInCat = state.feeds.filter(f => f.categoryId === targetStreamId).map(f => f.id);
         filtered = localList.filter(art => feedsInCat.includes(art.feedId));
       }
@@ -54,41 +59,58 @@ export function useArticles() {
 
     // 2. Fetch online
     try {
-      const continuation = append ? state.articles.continuation : null;
-      const res = await greader.getArticles(streamId, {
-        count: 20,
-        continuation,
-        filter
-      });
+      let currentContinuation = append ? state.articles.continuation : null;
+      let items = [];
+      const targetCount = 20;
 
-      if (res.error) throw new Error(res.message || 'API error');
+      while (items.length < targetCount) {
+        const res = await greader.getArticles(streamId, {
+          count: 40, // Fetch more in case many are filtered
+          continuation: currentContinuation,
+          filter
+        });
 
-      const items = res.items ? res.items.map(item => {
-        // Map GReader properties to standard schema
-        const id = item.id;
-        const feedId = item.origin ? item.origin.streamId : '';
-        const title = item.title;
-        const author = item.author || '';
-        const published = item.published; // Unix timestamp
-        const url = item.canonical ? item.canonical[0].href : '';
-        
-        // Find body text (could be content.content or summary.content)
-        const content = item.content ? item.content.content : (item.summary ? item.summary.content : '');
+        if (res.error) throw new Error(res.message || 'API error');
+        if (!res.items || res.items.length === 0) break;
 
-        // States
-        const isRead = item.categories ? item.categories.includes('user/-/state/com.google/read') : false;
-        const isStarred = item.categories ? item.categories.includes('user/-/state/com.google/starred') : false;
+        let fetchedItems = res.items.map(item => {
+          // Map GReader properties to standard schema
+          const id = item.id;
+          const feedId = item.origin ? item.origin.streamId : '';
+          const title = item.title;
+          const author = item.author || '';
+          const published = item.published; // Unix timestamp
+          const url = item.canonical ? item.canonical[0].href : '';
+          
+          // Find body text (could be content.content or summary.content)
+          const content = item.content ? item.content.content : (item.summary ? item.summary.content : '');
 
-        return { id, feedId, title, author, published, url, content, isRead, isStarred };
-      }) : [];
+          // States
+          const isRead = item.categories ? item.categories.includes('user/-/state/com.google/read') : false;
+          const isStarred = item.categories ? item.categories.includes('user/-/state/com.google/starred') : false;
 
-      const newContinuation = res.continuation || null;
+          return { id, feedId, title, author, published, url, content, isRead, isStarred };
+        });
+
+        if (streamId === 'user/-/state/com.google/reading-list') {
+          fetchedItems = fetchedItems.filter(item => {
+            const feed = state.feeds.find(f => f.id === item.feedId);
+            if (!feed) return true;
+            return ['main', '10', 'important'].includes(feed.priority);
+          });
+        }
+
+        items = [...items, ...fetchedItems];
+        currentContinuation = res.continuation || null;
+
+        if (!currentContinuation) break;
+      }
 
       dispatch({
         type: 'SET_ARTICLES',
         payload: {
           items: append ? [...state.articles.items, ...items] : items,
-          continuation: newContinuation
+          continuation: currentContinuation
         }
       });
     } catch (e) {
