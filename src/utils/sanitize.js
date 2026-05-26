@@ -106,7 +106,7 @@ export function injectDropCap(html) {
     
     if (firstP && firstP.textContent.trim().length > 0) {
       // Find the first text node with alphanumeric characters
-      const walk = document.createTreeWalker(firstP, NodeFilter.SHOW_TEXT, null, false);
+      const walk = doc.createTreeWalker(firstP, NodeFilter.SHOW_TEXT, null, false);
       let node;
       while ((node = walk.nextNode())) {
         const text = node.nodeValue;
@@ -117,14 +117,14 @@ export function injectDropCap(html) {
           const letter = text.substring(index, index + 1);
           const after = text.substring(index + 1);
           
-          const wrapper = document.createElement('span');
+          const wrapper = doc.createElement('span');
           wrapper.className = 'gutenberg-first-letter';
           wrapper.textContent = letter;
           
-          const fragment = document.createDocumentFragment();
-          if (before) fragment.appendChild(document.createTextNode(before));
+          const fragment = doc.createDocumentFragment();
+          if (before) fragment.appendChild(doc.createTextNode(before));
           fragment.appendChild(wrapper);
-          if (after) fragment.appendChild(document.createTextNode(after));
+          if (after) fragment.appendChild(doc.createTextNode(after));
           
           node.parentNode.replaceChild(fragment, node);
           break;
