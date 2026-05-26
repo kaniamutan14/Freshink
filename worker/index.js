@@ -132,8 +132,9 @@ async function handleGReaderProxy(request, env) {
     });
   }
 
-  // Remove '/api/greader' from path
-  const greaderPath = request.url.split('/api/greader')[1];
+  // Remove '/api/greader' from path safely without breaking query params
+  const urlObj = new URL(request.url);
+  const greaderPath = urlObj.pathname.substring(urlObj.pathname.indexOf('/api/greader') + 12) + urlObj.search;
   const targetUrl = `${freshrssUrl}/api/greader.php${greaderPath}`;
 
   const forwardHeaders = new Headers();

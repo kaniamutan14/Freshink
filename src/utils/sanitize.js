@@ -48,10 +48,10 @@ export function sanitizeHTML(dirtyHTML) {
           const attrName = attr.name.toLowerCase();
           const val = attr.value.trim().toLowerCase();
           
-          // Strict URI validation: only allow http, https, mailto, and relative paths
+          // Strict URI validation: only allow http, https, mailto, relative paths, and safe inline images
           let isDangerousLink = false;
           if (attrName === 'href' || attrName === 'src') {
-            if (!/^(https?:\/\/|mailto:|\/)/i.test(val)) {
+            if (!/^(https?:\/\/|mailto:|\/|data:image\/)/i.test(val)) {
               isDangerousLink = true;
             }
           }

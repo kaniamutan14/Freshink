@@ -47,6 +47,7 @@ export function ArticleReader() {
     }
     setTimeout(() => {
       setScrapingError(null);
+      setScraping(false);
       setImgError(false);
     }, 0);
   }, [article]);

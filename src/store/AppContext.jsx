@@ -75,14 +75,26 @@ function reducer(state, action) {
       return { ...state, feeds: action.payload };
     case 'SET_UNREAD_COUNTS':
       return { ...state, unreadCounts: action.payload };
-    case 'SET_ARTICLES':
+    case 'SET_ARTICLES': {
+      let nextSelectedArticle = state.ui.selectedArticle;
+      if (nextSelectedArticle && action.payload.items) {
+        const updated = action.payload.items.find(a => a.id === nextSelectedArticle.id);
+        if (updated) {
+          nextSelectedArticle = updated;
+        }
+      }
       return {
         ...state,
         articles: {
           ...state.articles,
           ...action.payload
+        },
+        ui: {
+          ...state.ui,
+          selectedArticle: nextSelectedArticle
         }
       };
+    }
     case 'SET_ARTICLES_LOADING':
       return {
         ...state,
