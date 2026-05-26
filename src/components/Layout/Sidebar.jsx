@@ -21,8 +21,15 @@ export function Sidebar({ onSelectStream, onOpenSettings, isDrawerOpen }) {
   };
 
   const getAllArticlesUnreadCount = () => {
-    // Reading list represents all articles
-    return unreadCounts['user/-/state/com.google/reading-list'] || 0;
+    // We must manually sum the unread counts of feeds that are in the main stream
+    // because the server's reading-list unread count includes all hidden feeds too.
+    let count = 0;
+    feeds.forEach(feed => {
+      if (['main', '10', 'important'].includes(feed.priority)) {
+        count += (unreadCounts[feed.id] || 0);
+      }
+    });
+    return count;
   };
 
   const getStarredArticlesCount = () => {
