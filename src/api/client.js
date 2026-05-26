@@ -15,6 +15,11 @@ export async function request(endpoint, options = {}) {
     headers['Authorization'] = `GoogleLogin auth=${token}`;
   }
 
+  const freshrssUrl = localStorage.getItem('freshink_freshrss_url');
+  if (freshrssUrl) {
+    headers['X-FreshRSS-URL'] = freshrssUrl;
+  }
+
   const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
 
   const fetchOptions = {

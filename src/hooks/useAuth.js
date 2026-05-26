@@ -17,9 +17,10 @@ export function useAuth() {
         if (tokenMatch && tokenMatch[1]) {
            const token = tokenMatch[1];
            const username = res.headers.get('X-FreshRSS-Username') || 'Admin';
+           const targetUrl = res.headers.get('X-FreshRSS-Target-URL') || window.location.origin;
            localStorage.setItem('freshink_auth_token', token);
            localStorage.setItem('freshink_user', username);
-           localStorage.setItem('freshink_freshrss_url', window.location.origin);
+           localStorage.setItem('freshink_freshrss_url', targetUrl);
            localStorage.setItem('freshink_demo_mode', 'false');
 
            dispatch({
@@ -27,7 +28,7 @@ export function useAuth() {
              payload: {
                token,
                user: username,
-               freshrssUrl: window.location.origin,
+               freshrssUrl: targetUrl,
                isDemoMode: false
              }
            });

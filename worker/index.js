@@ -4,6 +4,7 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-FreshRSS-URL',
+  'Access-Control-Expose-Headers': 'X-FreshRSS-Username, X-FreshRSS-Target-URL',
   'Access-Control-Max-Age': '86400'
 };
 
@@ -84,6 +85,9 @@ async function handleSingleUserLogin(request, env) {
   returnHeaders.set('Content-Type', 'text/plain');
   if (env.FRESHRSS_USER) {
     returnHeaders.set('X-FreshRSS-Username', env.FRESHRSS_USER);
+  }
+  if (env.FRESHRSS_URL) {
+    returnHeaders.set('X-FreshRSS-Target-URL', env.FRESHRSS_URL.replace(/\/+$/, ''));
   }
   return new Response(responseText, {
     status: response.status,
