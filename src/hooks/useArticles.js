@@ -42,11 +42,11 @@ export function useArticles() {
       return filtered;
     };
 
-    // 1. If offline or in Demo Mode, fetch from local IndexedDB
-    if (!isOnline || isDemoMode) {
-      const localArticles = await db.getVal('feedData', 'articles') || [];
-      const filtered = getFilteredLocalArticles(localArticles, streamId);
-
+    // 1. Fetch from local IndexedDB for optimistic/instant UI display (only if not appending)
+    const localArticles = await db.getVal('feedData', 'articles') || [];
+    
+    if (!append) {
+      const filtered = getFilteredLocalArticles(localArticles, streamId).slice(0, 20);
       dispatch({
         type: 'SET_ARTICLES',
         payload: {
@@ -54,11 +54,15 @@ export function useArticles() {
           continuation: null
         }
       });
+    }
+
+    // 2. If offline or Demo Mode, we stop here
+    if (!isOnline || isDemoMode) {
       dispatch({ type: 'SET_ARTICLES_LOADING', payload: false });
       return;
     }
 
-    // 2. Fetch online
+    // 3. Fetch online (background sync / update)
     try {
       let currentContinuation = append ? state.articles.continuation : null;
       let items = [];

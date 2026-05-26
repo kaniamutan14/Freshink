@@ -55,6 +55,8 @@ export function AppShell() {
       return;
     }
 
+    // Clear articles instantly to prevent showing previous category's items
+    dispatch({ type: 'SET_ARTICLES', payload: { items: [], continuation: null } });
     // Transition on mobile
     dispatch({ type: 'UPDATE_UI', payload: { activePanel: 'list' } });
   };
