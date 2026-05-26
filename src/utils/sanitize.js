@@ -57,7 +57,13 @@ export function sanitizeHTML(dirtyHTML) {
           }
           
           if (!ALLOWED_ATTRS.has(attrName) || isDangerousLink) {
-            node.removeAttribute(attr.name);
+            // Whitelist specific classes
+            if (attrName === 'class' && val.includes('gutenberg-first-letter')) {
+              // Only allow this specific class and strip any others
+              node.setAttribute('class', 'gutenberg-first-letter');
+            } else {
+              node.removeAttribute(attr.name);
+            }
           }
         }
 
@@ -88,4 +94,47 @@ export function sanitizeHTML(dirtyHTML) {
     // Fallback to text content in case of severe DOMParser failures
     return dirtyHTML.replace(/<[^>]*>?/gm, '');
   }
+}
+
+export function injectDropCap(html) {
+  if (!html) return html;
+  
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const firstP = doc.querySelector('p');
+    
+    if (firstP && firstP.textContent.trim().length > 0) {
+      // Find the first text node with alphanumeric characters
+      const walk = document.createTreeWalker(firstP, NodeFilter.SHOW_TEXT, null, false);
+      let node;
+      while ((node = walk.nextNode())) {
+        const text = node.nodeValue;
+        const match = text.match(/[a-zA-Z0-9]/);
+        if (match) {
+          const index = match.index;
+          const before = text.substring(0, index);
+          const letter = text.substring(index, index + 1);
+          const after = text.substring(index + 1);
+          
+          const wrapper = document.createElement('span');
+          wrapper.className = 'gutenberg-first-letter';
+          wrapper.textContent = letter;
+          
+          const fragment = document.createDocumentFragment();
+          if (before) fragment.appendChild(document.createTextNode(before));
+          fragment.appendChild(wrapper);
+          if (after) fragment.appendChild(document.createTextNode(after));
+          
+          node.parentNode.replaceChild(fragment, node);
+          break;
+        }
+      }
+      return doc.body.innerHTML;
+    }
+  } catch (err) {
+    console.error('Failed to inject drop cap', err);
+  }
+  
+  return html;
 }

@@ -6,7 +6,7 @@ import { FontSizeControl } from '../Common/FontSizeControl';
 import { GutenbergToggle } from '../Common/GutenbergToggle';
 import { LayoutToggle } from '../Common/LayoutToggle';
 import { formatFullDate, calculateReadingTime } from '../../utils/dateFormat';
-import { sanitizeHTML } from '../../utils/sanitize';
+import { sanitizeHTML, injectDropCap } from '../../utils/sanitize';
 
 export function ArticleReader() {
   const { state, dispatch } = useContext(AppContext);
@@ -104,7 +104,11 @@ export function ArticleReader() {
 
   // Get active body HTML: full text scraped cache OR default feed content
   const rawBody = fullTextArticles[article.id] || article.content || '';
-  const cleanBody = sanitizeHTML(rawBody);
+  let cleanBody = sanitizeHTML(rawBody);
+  
+  if (gutenbergMode) {
+    cleanBody = injectDropCap(cleanBody);
+  }
 
   // Detect if article description is likely truncated (less than 600 chars or ends in ellipsis)
   const isTruncated = !fullTextArticles[article.id] && 

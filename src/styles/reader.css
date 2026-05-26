@@ -281,7 +281,7 @@
   Article Content Body Styling
 */
 .reader-content-body {
-  font-family: var(--font-serif-body);
+  font-family: var(--font-sans-ui);
   font-size: var(--reader-font-size);
   line-height: 1.6;
   color: var(--text-primary);
