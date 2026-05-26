@@ -84,6 +84,8 @@ export async function getArticles(streamId, options = {}) {
     endpoint += '&xt=user/-/state/com.google/read';
   }
   
+  endpoint += `&_cb=${Date.now()}`;
+  
   return request(endpoint);
 }
 

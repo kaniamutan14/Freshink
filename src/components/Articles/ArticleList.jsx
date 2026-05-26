@@ -43,7 +43,7 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
     // Refresh feeds then refresh active list
     await refreshFeeds();
     if (selectedCategory !== 'search') {
-      await fetchArticlesRef.current(getStreamId());
+      await fetchArticles(getStreamId());
     }
   };
 
@@ -65,16 +65,12 @@ export function ArticleList({ onSelectArticle, onOpenSettings }) {
 
 
 
-  const fetchArticlesRef = useRef(fetchArticles);
-  useEffect(() => {
-    fetchArticlesRef.current = fetchArticles;
-  }, [fetchArticles]);
-
   // Fetch new list when filter or active feed/category changes
   useEffect(() => {
     if (selectedCategory !== 'search') {
-      fetchArticlesRef.current(getStreamId());
+      fetchArticles(getStreamId());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, selectedFeed, selectedCategory]);
 
   const activeArticles = selectedCategory === 'search' ? searchResults : articles;
